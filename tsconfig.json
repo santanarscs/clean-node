@@ -7,6 +7,11 @@
     "allowJs": true,                        
     "forceConsistentCasingInFileNames": true,            
     "strict": true,                                      
-    "skipLibCheck": true                                 
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@test/*": ["tests/*"]
+    }                                
   }
 }
