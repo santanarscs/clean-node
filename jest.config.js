@@ -1,5 +1,5 @@
 module.exports = {
-  preset: '@shelf/jest-mongo',
+  preset: '@shelf/jest-mongodb',
   roots: ['<rootDir>/tests'],
   coverageDirectory: 'coverage',
   collectCoverageFrom: [
