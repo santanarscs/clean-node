@@ -11,14 +11,15 @@ export class MongoDbUserRepository implements UserRepository {
     }
   }
 
-  async findUserByEmail (email: string): Promise<UserData | null> {
+  async findUserByEmail (email: string): Promise<UserData> {
     const userCollection = MongoHelper.getCollection('users')
     const result = await userCollection.findOne({ email })
-    return result as UserData | null
+    return result as unknown as UserData
   }
 
   async findAllUsers (): Promise<UserData[]> {
-    throw new Error('Method not implemented.')
+    const userCollection = MongoHelper.getCollection('users')
+    return await userCollection.find().toArray() as unknown as UserData[]
   }
 
   async exists (user: UserData): Promise<boolean> {
