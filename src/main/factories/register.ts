@@ -1,10 +1,10 @@
 import { RegisterUserController } from '@/web-controllers'
 import { RegisterUserOnMailingList } from '@/usecases/register-user-on-mailing-list'
-import { InMemoryUserRepository } from '@/usecases/register-user-on-mailing-list/repository'
+import { MongoDbUserRepository } from '@/external/repositories/mongodb'
 
 export const makeRegisterUserController = (): RegisterUserController => {
-  const inMemoryUserRepository = new InMemoryUserRepository([])
-  const registerUserOnMailingListUseCase = new RegisterUserOnMailingList(inMemoryUserRepository)
+  const mongoDbUserRepository = new MongoDbUserRepository()
+  const registerUserOnMailingListUseCase = new RegisterUserOnMailingList(mongoDbUserRepository)
   const registerUserController = new RegisterUserController(registerUserOnMailingListUseCase)
   return registerUserController
 }
