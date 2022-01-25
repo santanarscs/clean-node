@@ -4,7 +4,7 @@ import { Either, left, right } from '@/shared'
 import { UseCase } from '@/usecases/ports'
 import { RegisterUserOnMailingList } from '@/usecases/register-user-on-mailing-list'
 import { SendEmail } from '@/usecases/send-mail'
-import { MailServiceError } from '../errors'
+import { MailServiceError } from '@/usecases/errors'
 
 export class RegisterAndSendEmail implements UseCase {
   private readonly registerUserOnMailingList: RegisterUserOnMailingList
@@ -23,7 +23,7 @@ export class RegisterAndSendEmail implements UseCase {
     }
     const user: User = userOrError.value
     const userData = { name: user.name.value, email: user.email.value }
-    await this.registerUserOnMailingList.perform(userData)
+    await this.registerUserOnMailingList.perform(user)
     const result = await this.sendEmail.perform(userData)
     if (result.isLeft()) {
       return left(result.value)
