@@ -1,5 +1,5 @@
 
-import { UserData } from '@/entities'
+import { User, UserData } from '@/entities'
 import { UserRepository } from '@/usecases/register-user-on-mailing-list/ports'
 import { RegisterUserOnMailingList } from '@/usecases/register-user-on-mailing-list'
 import { InMemoryUserRepository } from '@/usecases/register-user-on-mailing-list/repository'
@@ -13,37 +13,11 @@ describe('Register User on mailing list use case', () => {
     const name = 'any_name'
     const email = 'any@email.com'
 
-    const response = await useCase.perform({ name, email })
-    const user = await repo.findUserByEmail('any@email.com')
-    expect(user?.name).toBe('any_name')
-    expect(response.value.name).toBe('any_name')
-  })
+    const user = User.create({ name, email }).value as User
 
-  test('should not add user with invalid email to invalid mailing list', async () => {
-    const users: UserData[] = []
-    const repo: UserRepository = new InMemoryUserRepository(users)
-    const useCase: RegisterUserOnMailingList = new RegisterUserOnMailingList(repo)
-
-    const name = 'any_name'
-    const invalidEmail = 'invalid_email'
-
-    const response = (await useCase.perform({ name, email: invalidEmail })).value as Error
-    const user = await repo.findUserByEmail(invalidEmail)
-    expect(user).toBeNull()
-    expect(response.name).toEqual('InvalidEmailError')
-  })
-
-  test('should not add user with invalid name to invalid mailing list', async () => {
-    const users: UserData[] = []
-    const repo: UserRepository = new InMemoryUserRepository(users)
-    const useCase: RegisterUserOnMailingList = new RegisterUserOnMailingList(repo)
-
-    const invalidName = ''
-    const email = 'email@email.com'
-
-    const response = (await useCase.perform({ name: invalidName, email })).value as Error
-    const user = await repo.findUserByEmail(email)
-    expect(user).toBeNull()
-    expect(response.name).toEqual('InvalidNameError')
+    const response = await useCase.perform(user)
+    const addedUser = await repo.findUserByEmail('any@email.com')
+    expect(addedUser?.name).toBe('any_name')
+    expect(response.name).toBe('any_name')
   })
 })
